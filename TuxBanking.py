@@ -4,9 +4,9 @@
 # programmed by Benjamin Saravia on February 21, 2025.
 
 # needed imports
-import time # used 33 times
+import time # used 39 times
 import random # used 16 times
-import os # used 9 times
+import os # used 15 times
 import hashlib # used 4 times
 import getpass # used 1 time
 
@@ -117,16 +117,17 @@ def pin_creation():
                     global user_balance
                     user_balance += user_deposit
                     time.sleep(1)
-                    print(f"SYSTEM: {user_deposit} has been deposited to {username}'s account.")
+                    print(f"SYSTEM: ${user_deposit} has been deposited to {username}'s account.")
                     time.sleep(1)
                     
-                    break
+                    return
                     
                 else:
                 
                     print("\nSYSTEM: No initial deposit was made.")
                     time.sleep(1)
-                    break
+                    
+                    return
             
     # if the user inputs something invalid        
     except ValueError:
@@ -145,6 +146,8 @@ def pin_creation():
         if error_resolve.upper() == "Y":
             
             print("\nClosing the simulation...")
+            time.sleep(1.5)
+            os.system('exit')
             
         else:
             
@@ -267,6 +270,8 @@ def verification():
                             print("\nSYSTEM: You have failed 2 verification attempts.")
                             print("The simulation will now be terminated. Thank you for banking with TUX.")
                             print("\n🐧")
+                            time.sleep(1.5)
+                            os.system('exit')
                             
                             return
 
@@ -278,6 +283,8 @@ def verification():
                     print("\nSYSTEM: You have failed 2 verification attempts and will now be locked out.")
                     print("The simulation will now be terminated. Thank you for banking with TUX.")
                     print("\n🐧")
+                    time.sleep(1.5)
+                    os.system('exit')
                     
                     return
 
@@ -289,6 +296,8 @@ def verification():
             print("\nSYSTEM: You have failed 2 verification attempts.")
             print("The simulation will now be terminated. Thank you for banking with TUX.")
             print("\n🐧")
+            time.sleep(1.5)
+            os.system('exit')
             
             return
 
@@ -305,6 +314,8 @@ def verification():
         if error_resolve.upper() == "Y":
             
             print("\nClosing the simulation...")
+            time.sleep(1.5)
+            os.system('exit')
             
         else:
             
@@ -354,6 +365,8 @@ def main():
         if error_resolve.upper() == "Y":
             
             print("\nClosing the simulation...")
+            time.sleep(1.5)
+            os.system('exit')
             
         else:
             
