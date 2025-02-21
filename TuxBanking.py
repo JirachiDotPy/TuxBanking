@@ -2,10 +2,9 @@
 # through hashing and hash comparisons.
 
 # programmed by Benjamin Saravia on February 21, 2025.
-# originally named "CredentialsVerification.py"
 
 # needed imports
-import time # used 30 times
+import time # used 33 times
 import random # used 16 times
 import os # used 9 times
 import hashlib # used 4 times
@@ -13,7 +12,7 @@ import getpass # used 1 time
 
 # needed lists and variables
 numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-default_balance = 500
+user_balance = 0 # it is $0 by default
 # card type 1 = CREDIT
 # card type 2 = DEBIT
 
@@ -97,7 +96,7 @@ def pin_creation():
             
                 continue
 
-            else:
+            while True:
             
                 # creating a SHA 256 hash for the user's PIN for authentication
                 global user_PIN_hash
@@ -109,7 +108,25 @@ def pin_creation():
                 print("\nPIN: ****")
                 time.sleep(1)
             
-                break
+                # setting the balance for the account
+                deposit_decision = input("\nWould you like to make an initial deposit? (y / n): ")
+                
+                if deposit_decision.lower() == "y":
+                    
+                    user_deposit = int(input('Deposit amount: >$'))
+                    global user_balance
+                    user_balance += user_deposit
+                    time.sleep(1)
+                    print(f"SYSTEM: {user_deposit} has been deposited to {username}'s account.")
+                    time.sleep(1)
+                    
+                    break
+                    
+                else:
+                
+                    print("\nSYSTEM: No initial deposit was made.")
+                    time.sleep(1)
+                    break
             
     # if the user inputs something invalid        
     except ValueError:
@@ -237,7 +254,7 @@ def verification():
 
                                 print(f"\nWelcome, {username}!")
                                 print(f"Account: ****-****-****-{last_four_digits}")
-                                print(f"Balance: ${default_balance}")
+                                print(f"Balance: ${user_balance}")
                                 print("\n🐧")
                                 
                                 return  # exit the function after successful verification
