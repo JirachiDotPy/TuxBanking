@@ -1,72 +1,88 @@
 # bank simulator with credit and debit credential generators that use authentication
 # through hashing and hash comparisons.
 
-# programmed by Benjamin Saravia on February 21, 2025.
+# programmed by Benjamin Saravia on March 30, 2025
 
 # needed imports
 import time # used 39 times
 import random # used 16 times
-import os # used 15 times
+import os # used 15 times # NOTE: THE OS MODULE MAY NOT BE AVAILABLE FOR CERTAIN PYTHON COMPILERS
 import hashlib # used 4 times
 import getpass # used 1 time
 
 # needed lists and variables
 numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+valid_card_types = ["c", "credit", "d", "debit"]
 user_balance = 0 # it is $0 by default
 # card type 1 = CREDIT
 # card type 2 = DEBIT
 
 # creating function that creates the random credit/debit credentials
 def credential_generate(desired_card):
-    
-    # creating four variables that will each hold 4 different combinations of digits for the card credentials to be created
-    first_four_numbers = str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1))
-    second_four_numbers = str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1))
-    third_four_numbers = str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1))
-    fourth_four_numbers = str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1))
-    
-    card_digits_list = [first_four_numbers, second_four_numbers, third_four_numbers, fourth_four_numbers]
 
-    # if the user chose a CREDIT card
-    if desired_card == "credit" or "c":
+    global user_card_type # globally declaring the user_card_type variable
+    
+    while True:
         
-        global user_card_type # globally declaring the user_card_type variale
-        user_card_type = 1
+        desired_card = str(desired_card).lower()
+
+        # first testing if the user gives invalid input
+        # this while loop prompts the user until they give a proper input
+        while (desired_card not in valid_card_types):
+
+            user_card_type = 0
+            print(f"\nYour input '{desired_card}' is not valid. Please enter 'c' for credit or 'd' for debit.")
+            # getting a new input to continue the loop
+            desired_card = input("Do you want a CREDIT (c) or DEBIT (d) card?: ").lower()
+            continue
+
+        # creating four variables that will each hold 4 different combinations of digits for the card credentials to be created
+        first_four_numbers = str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1))
+        second_four_numbers = str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1))
+        third_four_numbers = str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1))
+        fourth_four_numbers = str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1)) + str(random.sample(numbers, 1))
+    
+        card_digits_list = [first_four_numbers, second_four_numbers, third_four_numbers, fourth_four_numbers]
+    
+        # if the user chose a CREDIT card
+        if desired_card in ["c", "credit"]:
+            user_card_type = 1
         
-        print("Generating card credentials...")
-        time.sleep(1.5)
+            print("Generating card credentials...")
+            time.sleep(1.5)
         
-        credit_card_credentials = [digit.replace('[', '').replace(']', '') for digit in card_digits_list]
-        credit_card_credentials = "-".join(credit_card_credentials)
-        credit_card_credentials = str(credit_card_credentials)
+            credit_card_credentials = [digit.replace('[', '').replace(']', '') for digit in card_digits_list]
+            credit_card_credentials = "-".join(credit_card_credentials)
+            credit_card_credentials = str(credit_card_credentials)
         
-        global last_four_digits
-        last_four_digits = credit_card_credentials[15:19] # slicing the last 4 digits of the 16-digit credential
-        last_four_digits = str(last_four_digits)
+            global last_four_digits
+            last_four_digits = credit_card_credentials[15:19] # slicing the last 4 digits of the 16-digit credential
+            last_four_digits = str(last_four_digits)
         
-        # getting the hash of last_four_digits for authentication into SHA 256
-        global last_four_digits_hash
-        last_four_digits_hash = hashlib.sha256(last_four_digits.encode()).hexdigest()
-        last_four_digits_hash = str(last_four_digits_hash)
+            # getting the hash of last_four_digits for authentication into SHA 256
+            global last_four_digits_hash
+            last_four_digits_hash = hashlib.sha256(last_four_digits.encode()).hexdigest()
+            last_four_digits_hash = str(last_four_digits_hash)
         
-        print(f"\nYour credit card credentials are: {credit_card_credentials}")
-        time.sleep(2)
-        print(f"Card type: {user_card_type}")
+            print(f"\nYour credit card credentials are: {credit_card_credentials}")
+            time.sleep(2)
+            print(f"Card type: {user_card_type}")
+            return
         
-    # if the user chose a DEBIT card
-    elif desired_card == "debit" or "d":
+        # if the user chose a DEBIT card
+        elif desired_card in ["d", "debit"]:
+            user_card_type = 2
         
-        user_card_type = 2
+            print("Generating card credentials...")
+            time.sleep(1.5)
         
-        print("Generating card credentials...")
-        time.sleep(1.5)
-        
-        debit_card_credentials = [digit.replace('[', '').replace(']', '') for digit in card_digits_list]
-        debit_card_credentials = "-".join(debit_card_credentials)
-        debit_card_credentials = str(debit_card_credentials)
-        print(f"\nYour debit card credentials are: {debit_card_credentials}")
-        time.sleep(2)
-        print(f"Card type: {user_card_type}")
+            debit_card_credentials = [digit.replace('[', '').replace(']', '') for digit in card_digits_list]
+            debit_card_credentials = "-".join(debit_card_credentials)
+            debit_card_credentials = str(debit_card_credentials)
+            print(f"\nYour debit card credentials are: {debit_card_credentials}")
+            time.sleep(2)
+            print(f"Card type: {user_card_type}")
+            return
         
 # creating the variable that prompts the user to create a 4-digit PIN to proect their CREDIT/DEBIT card
 def pin_creation():
@@ -76,7 +92,7 @@ def pin_creation():
         
         while True:
         
-            time.sleep(2)
+            time.sleep(2)    
             if user_card_type == 1:
             
                 print("\nPlease choose your 4-digit PIN for your CREDIT card: ")
@@ -118,7 +134,7 @@ def pin_creation():
                     user_balance += user_deposit
                     time.sleep(1)
                     print(f"SYSTEM: ${user_deposit} has been deposited to {username}'s account.")
-                    time.sleep(1)
+                    time.sleep(2)
                     
                     return
                     
@@ -343,8 +359,7 @@ def main():
         print(f"Hello, {username}.")
         time.sleep(1.2)
     
-        card_decision = input("\nDo you want a CREDIT (c) or DEBIT (d) card?: ")
-        card_decision = card_decision.lower()
+        card_decision = input("\nDo you want a CREDIT (c) or DEBIT (d) card?: ").lower()
     
         credential_generate(card_decision)
         
